@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Environment (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+renderer/dist/
+release/
+release-build/
+build/*.db
+build/staging.db
+build/branding-256.png
+*.db
+*.db-journal
+
+# Prisma / generated client (regenerate with npm run prisma:generate)
+generated/
+
+# Logs & OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Electron builder artifacts
+*.blockmap
+dist/

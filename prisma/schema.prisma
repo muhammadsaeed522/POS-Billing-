@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma-client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id    String @id @default(cuid())
+  name  String @unique
+  users User[]
+}
+
+model User {
+  id                  String    @id @default(cuid())
+  username            String    @unique
+  email               String?   @unique
+  phone               String?
+  passwordHash        String
+  displayName         String
+  profileImage        String?
+  isActive            Boolean   @default(true)
+  failedLoginAttempts Int       @default(0)
+  lockedUntil         DateTime?
+  lastLoginAt         DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  sessions              AuthSession[]
+  activityLogs          ActivityLog[]
+  passwordResetTokens   PasswordResetToken[]
+  sales                 Sale[]
+}
+
+model AuthSession {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deviceInfo String?
+  ipAddress  String?
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model ActivityLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action     String
+  details    String?
+  ipAddress  String?
+  deviceInfo String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+}
+
+model Product {
+  id                 String    @id @default(cuid())
+  name               String
+  sku                String?   @unique
+  barcode            String?   @unique
+  imagePath          String?
+  unit               String
+  categoryId         String?
+  category           Category? @relation(fields: [categoryId], references: [id])
+  salePriceCents     Int
+  purchasePriceCents Int
+  stockQtyMilli      Int
+  lowStockQtyMilli   Int?
+  isActive           Boolean   @default(true)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+}
+
+model Customer {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String?  @unique
+  address     String?
+  creditCents Int      @default(0)
+  loyaltyPts  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sales Sale[]
+}
+
+model Sale {
+  id              String    @id @default(cuid())
+  invoiceNo       String    @unique
+  saleAt          DateTime  @default(now())
+  customerId      String?
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  cashierUserId   String?
+  cashier         User?     @relation(fields: [cashierUserId], references: [id])
+  subtotalCents   Int
+  discountCents   Int
+  totalCents      Int
+  paymentMethod   String
+  notes           String?
+
+  items SaleItem[]
+}
+
+model SaleItem {
+  id             String @id @default(cuid())
+  saleId         String
+  sale           Sale   @relation(fields: [saleId], references: [id])
+  productId      String
+  qtyMilli       Int
+  unitPriceCents Int
+  lineTotalCents Int
+}
+
+model Expense {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  amountCents Int
+  spentAt     DateTime @default(now())
+  notes       String?
+}
+
+model Shift {
+  id               String    @id @default(cuid())
+  cashierUserId    String
+  openedAt         DateTime  @default(now())
+  closedAt         DateTime?
+  openingCashCents Int
+  closingCashCents Int?
+  notes            String?
+}
+
+model Draft {
+  id        String   @id @default(cuid())
+  title     String
+  payload   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StockLog {
+  id             String   @id @default(cuid())
+  productId      String
+  qtyChangeMilli Int
+  reason         String
+  createdAt      DateTime @default(now())
+}
+
+model Setting {
+  key   String @id
+  value String
+}

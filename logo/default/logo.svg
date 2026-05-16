@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="POS Billing">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#g)"/>
+  <path fill="#fff" d="M36 44h56a4 4 0 0 1 4 4v8H32v-8a4 4 0 0 1 4-4zm-4 20h64v36a4 4 0 0 1-4 4H36a4 4 0 0 1-4-4V64zm16 8v20h8V72h-8zm16 0v20h8V72h-8zm16 0v20h8V72h-8z"/>
+</svg>

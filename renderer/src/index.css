@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  :root.dark {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-50;
+  }
+
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+
+    html,
+    body,
+    #root {
+      height: auto;
+      min-height: 0;
+      background: #fff !important;
+    }
+
+    body {
+      color: #09090b !important;
+    }
+
+    .report-print-area {
+      max-width: none !important;
+    }
+  }
+}
+
+@layer utilities {
+  @keyframes scan-line-flash {
+    0% {
+      background-color: rgba(16, 185, 129, 0.45);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+  .animate-scan-line-flash {
+    animation: scan-line-flash 0.65s ease-out;
+  }
+}

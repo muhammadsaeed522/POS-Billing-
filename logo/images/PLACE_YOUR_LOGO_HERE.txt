@@ -1,0 +1,19 @@
+Drop your store logo in this folder.
+
+Supported file names (recommended):
+  logo.png
+  logo.jpg
+  logo.jpeg
+  logo.webp
+  logo.ico
+  logo.svg
+
+You can also use any single image file in this folder (newest file is used).
+
+After adding or replacing the image, restart the app. The logo updates automatically in:
+  - Login screen
+  - Sidebar and header
+  - Splash screen
+  - Window and taskbar icon
+
+To update the installer (.exe) icon, run: npm run dist
